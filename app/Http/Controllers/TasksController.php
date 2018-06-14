@@ -40,9 +40,13 @@ class TasksController extends Controller
     {
         $task = new Task;
 
-        return view('tasks.create', [
+        if (\Auth::user()->id === $task->user_id){
+            return view('tasks.create', [
             'task' => $task,
         ]);
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -138,9 +142,9 @@ class TasksController extends Controller
 
         if (\Auth::user()->id === $task->user_id) {
             $task->delete();
+        }else{
+            return redirect('/');
         }
-
-       return redirect('/');  
     }
 
 }

@@ -82,6 +82,8 @@ class TasksController extends Controller
         return view('tasks.show', [
             'task' => $task,
         ]);
+        }else{
+            return redirect('/');
         }
     }
 
@@ -98,6 +100,8 @@ class TasksController extends Controller
         return view('tasks.edit', [
             'task' => $task,
         ]);
+        }else{
+            return redirect('/');
         }
     }
 

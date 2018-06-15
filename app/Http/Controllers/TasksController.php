@@ -86,10 +86,12 @@ class TasksController extends Controller
     {
       
         $task = Task::find($id);
-         if (\Auth::user()->id === $task->user_id){
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+
+        if ($task != null && \Auth::user()->id === $task->user_id){
+            return view('tasks.show', [
+                'task' => $task,
+            
+            ]);
         }else{
             return redirect('/');
         }
@@ -122,14 +124,18 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $this->validate($request, [
+         
+             $this->validate($request, [
             'status' => 'required|max:10',   // add
             'content' => 'required|max:191',
         ]);
+        
         $task = Task::find($id);
         $task->status = $request->status;  
         $task->content = $request->content;
+        if (\Auth::user()->id === $task->user_id){
         $task->save();
+        }
 
         return redirect('/');
     }

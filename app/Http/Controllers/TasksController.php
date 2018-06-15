@@ -18,7 +18,6 @@ class TasksController extends Controller
     public function index()
     {
        if(\Auth::check()){
-          
            $tasks = \Auth::user()->tasks()->orderBy('created_at','desc')->paginate(10);
            
            return view('tasks.index', [
@@ -40,11 +39,12 @@ class TasksController extends Controller
     {
         $task = new Task;
 
-        if (\Auth::user()->id === $task->user_id){
+         if(\Auth::check()){
             return view('tasks.create', [
             'task' => $task,
         ]);
-        }else{
+        }
+        else{
             return redirect('/');
         }
     }
@@ -57,6 +57,7 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
+         if(\Auth::check()){
         $this->validate($request, [
         'status' => 'required|max:10',   // add
         'content' => 'required|max:191',
@@ -67,8 +68,11 @@ class TasksController extends Controller
         $task->content = $request->content;
         $task->user_id = $user->id;
         $task->save();
+         return redirect('/');
+         }else{
 
         return redirect('/');
+         }
     }
 
 
@@ -82,7 +86,7 @@ class TasksController extends Controller
     {
       
         $task = Task::find($id);
-        if (\Auth::user()->id === $task->user_id){
+         if (\Auth::user()->id === $task->user_id){
         return view('tasks.show', [
             'task' => $task,
         ]);
@@ -142,9 +146,9 @@ class TasksController extends Controller
 
         if (\Auth::user()->id === $task->user_id) {
             $task->delete();
-        }else{
+        } 
             return redirect('/');
-        }
+        
     }
 
 }
